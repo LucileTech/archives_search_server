@@ -17,7 +17,7 @@ const saltRounds = 10;
 router.post("/signup", async (req, res, next) => {
 
   // Check the request body of the front
-  const { name, email, password, isArtist } = req.body;
+  const { name, email, password, isContributor } = req.body;
 
   // check if some fields are empty
   if (email === "" || name === "" || password === "" ) {
@@ -43,7 +43,7 @@ router.post("/signup", async (req, res, next) => {
       name,
       email,
       password: hashedPass,
-      isArtist,
+      isContributor,
     });
 
     const user = createdUser.toObject();

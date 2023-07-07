@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const CreationSchema = new mongoose.Schema(
+const ArchiveSchema = new mongoose.Schema(
   {
     title: { type: String, required: true},
     description: { type: String, required: true },
@@ -12,14 +12,14 @@ const CreationSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
-    artistId: 
+    contributorId: 
       {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Artist",
+      ref: "Contributor",
       },
   },
   { timestamps: true }
 );
 
-const Creation = mongoose.model("Creation", CreationSchema);
-module.exports = Creation;
+const Archive = mongoose.model("Archive", ArchiveSchema);
+module.exports = Archive;

@@ -7,11 +7,11 @@ const Order = require("../models/Order.model");
 
 router.get("/orders", protectRoute, async (req, res, next) => {
   try {
-  const allCreations = await Order.find({
+  const allArchives = await Order.find({
     userId: req.currentUser.id,
     date: { $exists: true },
   });
-  res.status(200).json(allCreations);
+  res.status(200).json(allArchives);
 } catch(error) {
   next(error)
 }
@@ -25,7 +25,7 @@ router.get("/orderCart", protectRoute, async (req, res, next) => {
   const orderCart = await Order.findOne({
     userId: req.currentUser.id,
     date: { $exists: false },
-  }).populate('creations.productId')
+  }).populate('archives.productId')
   
   res.status(200).json(orderCart);
 } catch(error) {
@@ -33,11 +33,11 @@ router.get("/orderCart", protectRoute, async (req, res, next) => {
 }
 });
 
-// Add one creation to OrderCart
-// HTTP 201 Created success status response code indicates that the request has succeeded and has led to the creation of a resource
+// Add one archive to OrderCart
+// HTTP 201 Created success status response code indicates that the request has succeeded and has led to the archive of a resource
 
 router.post(
-  "/creations/:id/addtocart",
+  "/archives/:id/addtocart",
   protectRoute,
   async (req, res, next) => {
     try {
@@ -50,14 +50,14 @@ router.post(
       // if an order without date has been find, the user already has a cart ! 
       if (order) {
         let updated = false;
-        order.creations.forEach((creation) => {
-          if (creation.productId.toString() === req.params.id) {
-            creation.quantity++;
+        order.archives.forEach((archive) => {
+          if (archive.productId.toString() === req.params.id) {
+            archive.quantity++;
             updated = true;
           }
         });
         if (!updated) {
-          order.creations.push({
+          order.archives.push({
             productId: req.params.id,
             quantity: 1,
           });
@@ -68,7 +68,7 @@ router.post(
       } else {
         const newOrder = await Order.create({
           userId: req.currentUser.id,
-          creations: [
+          archives: [
             {
               productId: req.params.id,
               quantity: 1,
@@ -85,7 +85,7 @@ router.post(
   }
 );
 
-// Delete one creation in order
+// Delete one archive in order
 // HTTP 202 Accepted
 
 router.patch("/orderCart/:id", protectRoute, async (req, res, next) => {
@@ -98,12 +98,12 @@ router.patch("/orderCart/:id", protectRoute, async (req, res, next) => {
         date: { $exists: false },
       },
       {
-        $pull: { creations: { productId: id } },
+        $pull: { archives: { productId: id } },
       },
       {
         new: true,
       }
-    ).populate("creations.productId")
+    ).populate("archives.productId")
 
     res.status(202).json(updatedOrder);
   } catch (error) {
@@ -126,10 +126,10 @@ router.delete("/orderCart/delete", protectRoute, async (req, res, next) => {
   }
 });
 
-// Add an amount of creation in cart
-// HTTP 201 Created success status response code indicates that the request has succeeded and has led to the creation of a resource
+// Add an amount of archive in cart
+// HTTP 201 Created success status response code indicates that the request has succeeded and has led to the archive of a resource
 router.patch(
-  "/orderCart/increment/:creationId",
+  "/orderCart/increment/:archiveId",
   protectRoute,
   async (req, res, next) => {
     try {
@@ -140,9 +140,9 @@ router.patch(
       });
       if (order) {
         let updated = false;
-        order.creations.forEach((creation) => {
-          if (creation.productId.toString() === req.params.creationId) {
-            creation.quantity++;
+        order.archives.forEach((archive) => {
+          if (archive.productId.toString() === req.params.archiveId) {
+            archive.quantity++;
             updated = true;
           }
         });
@@ -155,11 +155,11 @@ router.patch(
   }
 );
 
-// Remove an amount of creation in cart
-// HTTP 201 Created success status response code indicates that the request has succeeded and has led to the creation of a resource
+// Remove an amount of archive in cart
+// HTTP 201 Created success status response code indicates that the request has succeeded and has led to the archive of a resource
 
 router.patch(
-  "/orderCart/decrement/:creationId",
+  "/orderCart/decrement/:archiveId",
   protectRoute,
   async (req, res, next) => {
     try {
@@ -170,14 +170,14 @@ router.patch(
       });
       if (order) {
         let updated = false;
-        order.creations.forEach((creation) => {
-          if (creation.productId.toString() === req.params.creationId) {
-            if (creation.quantity > 0) {
-              creation.quantity--;
+        order.archives.forEach((archive) => {
+          if (archive.productId.toString() === req.params.archiveId) {
+            if (archive.quantity > 0) {
+              archive.quantity--;
               updated = true;
             }
-            if (creation.quantity === 0) {
-              order.creations.splice(order.creations.indexOf(creation), 1);
+            if (archive.quantity === 0) {
+              order.archives.splice(order.archives.indexOf(archive), 1);
             }
           }
         });

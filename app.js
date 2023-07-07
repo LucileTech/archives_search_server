@@ -21,8 +21,8 @@ app.use(
 );
 
 app.use("/api", require("./routes/index"));
-app.use("/api", require("./routes/artists"));
-app.use("/api", require("./routes/creations"));
+app.use("/api", require("./routes/contributors"));
+app.use("/api", require("./routes/archives"));
 app.use("/api", require("./routes/orders"));
 
 app.use("/api/auth", require("./routes/auth"));

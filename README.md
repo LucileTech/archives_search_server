@@ -19,7 +19,7 @@ The server is using JWT auth
 
 ## Key features
 
-C(reate) R(ead) U(pdate) D(elete) on Cart, Artist, Creations
+C(reate) R(ead) U(pdate) D(elete) on Cart, Contributor, Archives
 Protected routes back and front
 Error handling
 Get, post, patch, delete routes
@@ -27,6 +27,7 @@ UseState, UseEffect, props
 Responsive
 
 ## .env
+
 PORT=?
 FRONTEND_URL=?
 TOKEN_SECRET=?

@@ -11,7 +11,7 @@ const userSchema = new Schema(
     },
     password: String,
     img: { type: String },
-    isArtist: {
+    isContributor: {
       type: Boolean,
       default: false,
     },
